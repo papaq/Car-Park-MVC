@@ -5,7 +5,7 @@ import model.car.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CarModel {
+public class CarParkModel {
 
     private ArrayList<Car> cars = new ArrayList<>();
 

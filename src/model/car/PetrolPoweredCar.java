@@ -6,19 +6,19 @@ public class PetrolPoweredCar extends Car implements SortableByValue, SortableBy
 
     private double value;
 
-    private double kmPerL;
+    private double fuelEfficiency;
 
     private int maxSpeed;
 
     public PetrolPoweredCar(String brand, String model, int year,
-                            FuelType fuelType, double value, double kmPerL,
+                            FuelType fuelType, double value, double fuelEfficiency,
                             int maxSpeed) {
 
         super(brand, model, year);
 
         this.fuelType = fuelType;
         this.value = value;
-        this.kmPerL = kmPerL;
+        this.fuelEfficiency = fuelEfficiency;
         this.maxSpeed = maxSpeed;
     }
 
@@ -37,7 +37,7 @@ public class PetrolPoweredCar extends Car implements SortableByValue, SortableBy
     @Override
     public double kilometersPerLiter() {
 
-        return kmPerL;
+        return fuelEfficiency;
     }
 
     @Override
