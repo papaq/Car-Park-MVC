@@ -2,7 +2,7 @@ package model.car;
 
 public interface SortableByFuelConsumption {
 
-    FuelType fuelType();
+    FuelType    fuelType();
 
-    double kilometersPerLiter();
+    double      fuelEfficiency();
 }

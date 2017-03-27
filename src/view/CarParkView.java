@@ -9,42 +9,51 @@ import java.util.ResourceBundle;
 
 public class CarParkView extends JFrame{
 
-    private final String LABEL_BRAND = "label.brand";
-    private final String LABEL_CAR_TYPE = "label.carType";
-    private final String LABEL_FUEL_EFFICIENCY = "label.fuelEfficiency";
-    private final String LABEL_FUEL_TYPE = "label.fuelType";
-    private final String LABEL_MAX_SPEED = "label.maxSpeed";
-    private final String LABEL_MODEL = "label.model";
-    private final String LABEL_PRICE = "label.price";
-    private final String LABEL_YEAR = "label.year";
-    private final String LABEL_SORT_BY = "label.sortBy";
-    private final String LABEL_SHOW_FROM_RANGE = "label.showRange";
+    public  final String LABEL_BRAND            = "label.brand";
+    private final String LABEL_CAR_TYPE         = "label.carType";
+    public  final String LABEL_FUEL_EFFICIENCY  = "label.fuelEfficiency";
+    private final String LABEL_FUEL_TYPE        = "label.fuelType";
+    public  final String LABEL_MAX_SPEED        = "label.maxSpeed";
+    public  final String LABEL_MODEL            = "label.model";
+    public  final String LABEL_PRICE            = "label.price";
+    public  final String LABEL_YEAR             = "label.year";
+    private final String LABEL_SORT_BY          = "label.sortBy";
+    private final String LABEL_SHOW_FROM_RANGE  = "label.showRange";
+    public  final String LABEL_SUM_PRICE        = "label.sumPrice";
 
-    private final String BUTTON_ADD = "button.add";
-    private final String BUTTON_SORT = "button.sort";
-    private final String BUTTON_SHOW = "button.show";
+    private final String BUTTON_ADD     = "button.add";
+    private final String BUTTON_SORT    = "button.sort";
+    private final String BUTTON_SHOW    = "button.show";
 
-    private final String SORT_YEAR = "sort.year";
-    private final String SORT_PRICE = "sort.price";
-    private final String SORT_MAX_SPEED = "sort.speed";
-    private final String SORT_FUEL_EFF = "sort.fEff";
+    public  final String SORT_YEAR      = "sort.year";
+    public  final String SORT_PRICE     = "sort.price";
+    public  final String SORT_MAX_SPEED = "sort.speed";
+    public  final String SORT_FUEL_EFF  = "sort.fEff";
 
-    private final String TYPE_ELECTRIC = "type.electric";
-    private final String TYPE_PP = "type.patrol";
+    public  final String TYPE_ELECTRIC  = "type.electric";
+    public  final String TYPE_PP        = "type.patrol";
 
-    private final String PATROL_BENZINE = "patrol.benzine";
-    private final String PATROL_DIESEL = "patrol.diesel";
-    private final String PATROL_GAS = "patrol.gas";
+    public  final String PETROL_BENZINE = "petrol.benzine";
+    public  final String PETROL_DIESEL  = "petrol.diesel";
+    public  final String PETROL_GAS     = "petrol.gas";
+
+    public  final String CAR             = "car";
+    private final String MISTAKE_MESSAGE = "mistake";
+    private final String ERROR           = "error";
+    public  final String RANGE_FROM      = "range.from";
+    public  final String RANGE_TO        = "range.to";
+
+    private final String COUNT_PRICE = "sum.price";
 
 
-    private JPanel layoutPanel;
-    private CardLayout cardLayout;
-    private JComboBox<String> comboBoxLanguages;
-    private JButton buttonSelectLanguage;
-    private JTextArea output;
+    private JPanel              layoutPanel;
+    private CardLayout          cardLayout;
+    private JComboBox<String>   comboBoxLanguages;
+    private JButton             buttonSelectLanguage;
+    private JTextArea           output;
 
-    private JLabel labelFuelType;
-    private JLabel labelFuelEfficiency;
+    private JLabel              labelFuelType;
+    private JLabel              labelFuelEfficiency;
 
     private JTextField brand;
     private JTextField model;
@@ -58,20 +67,21 @@ public class CarParkView extends JFrame{
 
     private JComboBox<String> comboBoxCarType;
     private JComboBox<String> comboBoxFuelType;
+    private JComboBox<String> comboBoxSortType;
 
     private JButton buttonAddCar;
     private JButton buttonSortCars;
     private JButton buttonCarsRange;
+    private JButton buttonCountParkPrice;
 
     private ResourceBundle mainBundle;
 
     public CarParkView() {
 
-
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        this.setSize(750,400);
-        this.setMinimumSize(new Dimension(750,400));
+        this.setSize(800,400);
+        this.setMinimumSize(new Dimension(800,400));
         this.setTitle("Car park");
         this.setLocationRelativeTo(null);  // to center the app
 
@@ -84,13 +94,17 @@ public class CarParkView extends JFrame{
         languagePanel.add(buttonSelectLanguage, BorderLayout.SOUTH);
         setButtonNextListener();
 
-
         cardLayout = new CardLayout();
         layoutPanel = new JPanel(cardLayout);
 
         layoutPanel.add(languagePanel, "card1");
 
         add(layoutPanel);
+
+        buttonAddCar = new JButton();
+        buttonSortCars = new JButton();
+        buttonCarsRange = new JButton();
+        buttonCountParkPrice = new JButton();
     }
 
     private void setButtonNextListener() {
@@ -121,42 +135,43 @@ public class CarParkView extends JFrame{
 
 
         JPanel inputs = new JPanel();
-        //inputs.setBackground(new Color(255,255,255));
         inputs.setLayout(new GridBagLayout());
 
-        brand = new JTextField(12);
-        model = new JTextField(12);
-        year = new JTextField(3);
-        price = new JTextField(5);
+        brand   = new JTextField(12);
+        model   = new JTextField(12);
+        year    = new JTextField(3);
+        price   = new JTextField(5);
         maxSpeed = new JTextField(3);
         comboBoxCarType = new JComboBox<>(new String[]{
                 mainBundle.getString(TYPE_PP),
                 mainBundle.getString(TYPE_ELECTRIC)});
         comboBoxCarType.setPreferredSize(new Dimension(110, 20));
         comboBoxFuelType = new JComboBox<>(new String[]{
-                mainBundle.getString(PATROL_BENZINE),
-                mainBundle.getString(PATROL_DIESEL),
-                mainBundle.getString(PATROL_GAS)});
+                mainBundle.getString(PETROL_BENZINE),
+                mainBundle.getString(PETROL_DIESEL),
+                mainBundle.getString(PETROL_GAS)});
         comboBoxFuelType.setPreferredSize(new Dimension(110, 20));
         fuelEfficiency = new JTextField(4);
 
-        JComboBox<String> comboBoxSortType = new JComboBox<>(new String[]{
+        comboBoxSortType = new JComboBox<>(new String[]{
                 mainBundle.getString(SORT_YEAR),
                 mainBundle.getString(SORT_PRICE),
                 mainBundle.getString(SORT_MAX_SPEED),
                 mainBundle.getString(SORT_FUEL_EFF)});
         comboBoxSortType.setPreferredSize(new Dimension(110, 20));
 
-        rangeFrom = new JTextField(4);
-        rangeTo = new JTextField(4);
+        rangeFrom   = new JTextField(4);
+        rangeTo     = new JTextField(4);
 
 
-        buttonAddCar = new JButton(mainBundle.getString(BUTTON_ADD));
+        buttonAddCar.setText(mainBundle.getString(BUTTON_ADD));
         buttonAddCar.setPreferredSize(new Dimension(80, 20));
-        buttonSortCars = new JButton(mainBundle.getString(BUTTON_SORT));
+        buttonSortCars.setText(mainBundle.getString(BUTTON_SORT));
         buttonSortCars.setPreferredSize(new Dimension(110, 20));
-        buttonCarsRange = new JButton(mainBundle.getString(BUTTON_SHOW));
+        buttonCarsRange.setText(mainBundle.getString(BUTTON_SHOW));
         buttonCarsRange.setPreferredSize(new Dimension(110, 20));
+        buttonCountParkPrice.setText(mainBundle.getString(COUNT_PRICE));
+        buttonCountParkPrice.setPreferredSize(new Dimension(110, 20));
 
         output = new JTextArea();
 
@@ -179,18 +194,23 @@ public class CarParkView extends JFrame{
         gbc.gridy++;
         inputs.add(new Label(mainBundle.getString(LABEL_CAR_TYPE)), gbc);
         gbc.gridy++;
+
         labelFuelType = new JLabel(mainBundle.getString(LABEL_FUEL_TYPE));
         inputs.add(labelFuelType, gbc);
         gbc.gridy++;
+
         labelFuelEfficiency = new JLabel(mainBundle.getString(LABEL_FUEL_EFFICIENCY));
         inputs.add(labelFuelEfficiency, gbc);
         gbc.gridy++;
-        inputs.add(buttonAddCar, gbc);
 
+        inputs.add(buttonAddCar, gbc);
         gbc.gridy++;
+
         inputs.add(new JLabel(mainBundle.getString(LABEL_SORT_BY)), gbc);
         gbc.gridy++;
         inputs.add(new JLabel(mainBundle.getString(LABEL_SHOW_FROM_RANGE)), gbc);
+        gbc.gridy++;
+        inputs.add(new JLabel(mainBundle.getString(LABEL_SUM_PRICE)), gbc);
 
 
         gbc.gridx = 1;
@@ -214,7 +234,7 @@ public class CarParkView extends JFrame{
         gbc.gridy += 2;
         inputs.add(comboBoxSortType, gbc);
         gbc.anchor = GridBagConstraints.EAST;
-        gbc.weightx=1;
+        gbc.weightx = 1;
         inputs.add(buttonSortCars, gbc);
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.BASELINE_LEADING;
@@ -229,6 +249,9 @@ public class CarParkView extends JFrame{
         gbc.anchor = GridBagConstraints.EAST;
         gbc.weightx=1;
         inputs.add(buttonCarsRange, gbc);
+
+        gbc.gridy++;
+        inputs.add(buttonCountParkPrice, gbc);
 
 
         JPanel mainPanel = new JPanel(new GridLayout(1,2));
@@ -247,7 +270,7 @@ public class CarParkView extends JFrame{
 
             if (e.getStateChange() == ItemEvent.SELECTED) {
 
-                if (getComboCarTypeSelected().equals("Electric")) {
+                if (getComboCarTypeSelected().equals(mainBundle.getString(TYPE_ELECTRIC))) {
 
                     labelFuelType.setVisible(false);
                     labelFuelEfficiency.setVisible(false);
@@ -278,6 +301,11 @@ public class CarParkView extends JFrame{
     public void setButtonCarsRange(ActionListener listener) {
 
         buttonCarsRange.addActionListener(listener);
+    }
+
+    public void setButtonParkPrice(ActionListener listener) {
+
+        buttonCountParkPrice.addActionListener(listener);
     }
 
     public void setOutputText(String text) {
@@ -331,6 +359,11 @@ public class CarParkView extends JFrame{
         return comboBoxFuelType.getSelectedItem().toString();
     }
 
+    public String getComboSortTypeSelected() {
+
+        return comboBoxSortType.getSelectedItem().toString();
+    }
+
     public String getRangeFrom() {
 
         return rangeFrom.getText();
@@ -339,5 +372,31 @@ public class CarParkView extends JFrame{
     public String getRangeTo() {
 
         return rangeTo.getText();
+    }
+
+
+    public void showErrorMessage(String message) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                mainBundle.getString(MISTAKE_MESSAGE).concat(mainBundle.getString(message)).trim().concat("!"),
+                mainBundle.getString(ERROR).concat("!"), JOptionPane.ERROR_MESSAGE);
+    }
+
+    public boolean constStringEqualsBundle(String constString, String bundleString) {
+
+        return constString.equals(mainBundle.getString(bundleString));
+    }
+
+    public String getLocale(String name) {
+
+        try {
+
+            return mainBundle.getString(name);
+        }
+        catch (Exception e) {
+
+            return "";
+        }
     }
 }

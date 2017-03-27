@@ -1,31 +1,31 @@
 package model.car;
 
-public class PetrolPoweredCar extends Car implements SortableByValue, SortableByFuelConsumption, SortableByMaxSpeed {
+public class PetrolPoweredCar extends Car implements SortableByPrice, SortableByFuelConsumption, SortableByMaxSpeed {
 
     private FuelType fuelType;
 
-    private double value;
+    private int price;
 
     private double fuelEfficiency;
 
     private int maxSpeed;
 
     public PetrolPoweredCar(String brand, String model, int year,
-                            FuelType fuelType, double value, double fuelEfficiency,
+                            FuelType fuelType, int price, double fuelEfficiency,
                             int maxSpeed) {
 
         super(brand, model, year);
 
         this.fuelType = fuelType;
-        this.value = value;
+        this.price = price;
         this.fuelEfficiency = fuelEfficiency;
         this.maxSpeed = maxSpeed;
     }
 
     @Override
-    public double value() {
+    public int price() {
 
-        return value;
+        return price;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class PetrolPoweredCar extends Car implements SortableByValue, SortableBy
     }
 
     @Override
-    public double kilometersPerLiter() {
+    public double fuelEfficiency() {
 
         return fuelEfficiency;
     }

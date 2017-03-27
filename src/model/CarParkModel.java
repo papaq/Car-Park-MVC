@@ -3,26 +3,25 @@ package model;
 import model.car.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class CarParkModel {
 
     private ArrayList<Car> cars = new ArrayList<>();
 
     public void addPetrolPoweredCar(String brand, String model, int year,
-                  FuelType fuelType, double value, double kmPerL,
+                  FuelType fuelType, int price, double kmPerL,
                   int maxSpeed) {
 
-        cars.add(new PetrolPoweredCar(brand, model, year, fuelType, value, kmPerL, maxSpeed));
+        cars.add(new PetrolPoweredCar(brand, model, year, fuelType, price, kmPerL, maxSpeed));
     }
 
     public void addElectricCar(String brand, String model, int year,
-                               double value, int maxSpeed) {
+                               int price, int maxSpeed) {
 
-        cars.add(new ElectricCar(brand, model, year, value, maxSpeed));
+        cars.add(new ElectricCar(brand, model, year, price, maxSpeed));
     }
 
-    public ArrayList<Car> sortCarsByFuelConsumption() {
+    public ArrayList<Car> sortCarsByFuelEfficiency() {
 
         ArrayList<SortableByFuelConsumption> sortedByConsumption = new ArrayList<>();
         for (Car car : cars) {
@@ -31,14 +30,14 @@ public class CarParkModel {
                 sortedByConsumption.add((SortableByFuelConsumption)car);
         }
 
-        Collections.sort(sortedByConsumption, (carA, carB) -> {
+        sortedByConsumption.sort((carA, carB) -> {
 
             final int BEFORE = -1;
             final int EQUAL = 0;
             final int AFTER = 1;
 
-            double carAconsumption = carA.kilometersPerLiter();
-            double carBconsumption = carB.kilometersPerLiter();
+            double carAconsumption = carA.fuelEfficiency();
+            double carBconsumption = carB.fuelEfficiency();
 
             if (carAconsumption < carBconsumption) return BEFORE;
             if (carAconsumption > carBconsumption) return AFTER;
@@ -63,7 +62,7 @@ public class CarParkModel {
                 sortedBySpeed.add((SortableByMaxSpeed)car);
         }
 
-        Collections.sort(sortedBySpeed, (carA, carB) -> {
+        sortedBySpeed.sort((carA, carB) -> {
 
             final int BEFORE = -1;
             final int EQUAL = 0;
@@ -78,7 +77,37 @@ public class CarParkModel {
         });
 
         ArrayList<Car> sortedCars = new ArrayList<>();
-        for (SortableByMaxSpeed car : sortedBySpeed) {
+        for (SortableByMaxSpeed car : sortedBySpeed)
+            sortedCars.add((Car) car);
+
+        return sortedCars;
+    }
+
+    public ArrayList<Car> sortCarsByPrice() {
+
+        ArrayList<SortableByPrice> sortedByPrice = new ArrayList<>();
+        for (Car car : cars) {
+
+            if (car instanceof SortableByPrice)
+                sortedByPrice.add((SortableByPrice)car);
+        }
+
+        sortedByPrice.sort((carA, carB) -> {
+
+            final int BEFORE = -1;
+            final int EQUAL = 0;
+            final int AFTER = 1;
+
+            double carAPrice = carA.price();
+            double carBPrice = carB.price();
+
+            if (carAPrice < carBPrice) return BEFORE;
+            if (carAPrice > carBPrice) return AFTER;
+            return EQUAL;
+        });
+
+        ArrayList<Car> sortedCars = new ArrayList<>();
+        for (SortableByPrice car : sortedByPrice) {
 
             sortedCars.add((Car)car);
         }
@@ -86,36 +115,25 @@ public class CarParkModel {
         return sortedCars;
     }
 
-    public ArrayList<Car> sortCarsByValue() {
+    public ArrayList<Car> sortCarsByYear() {
 
-        ArrayList<SortableByValue> sortedByValue = new ArrayList<>();
-        for (Car car : cars) {
+        ArrayList<Car> sortedByYear = new ArrayList<>(cars);
 
-            if (car instanceof SortableByValue)
-                sortedByValue.add((SortableByValue)car);
-        }
-
-        Collections.sort(sortedByValue, (carA, carB) -> {
+        sortedByYear.sort((carA, carB) -> {
 
             final int BEFORE = -1;
             final int EQUAL = 0;
             final int AFTER = 1;
 
-            double carAvalue = carA.value();
-            double carBvalue = carB.value();
+            double carAYear = carA.getYear();
+            double carBYear = carB.getYear();
 
-            if (carAvalue < carBvalue) return BEFORE;
-            if (carAvalue > carBvalue) return AFTER;
+            if (carAYear < carBYear) return BEFORE;
+            if (carAYear > carBYear) return AFTER;
             return EQUAL;
         });
 
-        ArrayList<Car> sortedCars = new ArrayList<>();
-        for (SortableByValue car : sortedByValue) {
-
-            sortedCars.add((Car)car);
-        }
-
-        return sortedCars;
+        return sortedByYear;
     }
 
     public ArrayList<Car> carsWithSpeedInRange(int lowBorder, int highBorder) {
@@ -138,15 +156,15 @@ public class CarParkModel {
         return cars;
     }
 
-    public double countParkValue() {
+    public int countParkValue() {
 
-        double value = 0;
+        int value = 0;
 
         for (Car car : cars) {
 
-            if (car instanceof SortableByValue) {
+            if (car instanceof SortableByPrice) {
 
-                value += ((SortableByValue) car).value();
+                value += ((SortableByPrice) car).price();
             }
         }
 

@@ -1,23 +1,23 @@
 package model.car;
 
-public class ElectricCar extends Car implements SortableByValue, SortableByMaxSpeed{
+public class ElectricCar extends Car implements SortableByPrice, SortableByMaxSpeed{
 
-    private double value;
+    private int price;
 
     private int maxSpeed;
 
-    public ElectricCar(String brand, String model, int year, double value, int maxSpeed) {
+    public ElectricCar(String brand, String model, int year, int price, int maxSpeed) {
 
         super(brand, model, year);
 
-        this.value = value;
+        this.price = price;
         this.maxSpeed = maxSpeed;
     }
 
     @Override
-    public double value() {
+    public int price() {
 
-        return value;
+        return price;
     }
 
     @Override
